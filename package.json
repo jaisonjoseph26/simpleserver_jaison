@@ -6,6 +6,6 @@
   "repository": "",
   "author": "Rick Kozak",
   "dependencies": {
-    "express": "~3.2.4"
+    "express": "^4.15.3"
   }
 }
