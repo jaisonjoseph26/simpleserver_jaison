@@ -1,0 +1,127 @@
+/*body{
+font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif
+}
+.navbar-brand{
+	background-image: url("https://www.instagram.com/static/sprites/core/d21416.png");
+	background-position:-177px 0;
+}
+
+#container-insta {
+
+	margin:0 15% 0 15%;
+
+}
+
+.menu-sprite-link1{
+	background-position: -242px -272px;
+}
+
+.link1{
+	background-image: url("https://www.instagram.com/static/sprites/core/d21416.png");
+
+}
+
+.menu-sprite-link2
+{
+	background-position:-130px -322px;
+}
+
+
+.menu-sprite-link3
+{
+	background-position:-78px -322px;
+}
+
+.footer-men1 ul{
+	margin: 0 auto;
+    width: 620px;
+}
+
+
+
+
+*/
+
+
+nav.navbar {
+    font-size: 28px;
+    line-height: 34px;
+    padding: 10px 0;
+    margin-bottom: 0;
+    border-bottom: 1px solid rgba(0,0,0,.0975);
+}
+
+nav .rpanel i.fa {
+	padding:0 5px;
+}
+
+nav i.fa.fa-instagram.hidden-sm.hidden-xs {
+    padding-right: 10px;
+    border-right: 1px solid #333333;
+}
+
+.listing-inner {
+	border-radius: 3px;
+    background-color: #fff;
+    border: 1px solid #e6e6e6;
+    width: 100%;
+    max-width: 600px;
+    margin: 15px auto;
+}
+
+.listing-inner .top {
+    height: 50px;
+    line-height: 50px;
+	padding:0 10px;
+}
+.listing-inner .top img {
+	height: 30px;
+}
+.middle img {
+	width: 100%;
+	height: auto;
+}
+
+.footer-inner{
+
+	max-width:600px;
+	margin:15px auto;
+}
+
+.footer-top{
+		max-width:50%;
+	margin:15px auto;
+}
+
+
+.footer-bottom{
+		max-width:50%;
+	margin:15px auto;
+}
+.footer-menu{
+
+	display:inline;
+	text-decoration: none;
+}
+
+.copyrights{
+	max-width:50%;
+	margin:15px auto;
+	text-align: center;
+
+}
+@media screen and ( max-width: 991px ) {
+
+.lpanel {
+	text-align:center;
+}	
+
+.footer-mobile{
+	max-width:100%;
+	margin:15px auto;
+	text-align: center;
+	
+}
+
+}
+
