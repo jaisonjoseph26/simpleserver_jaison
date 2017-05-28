@@ -1,40 +1,16 @@
-//
-// # SimplestServer
-//
+
+/*PROG8165 - Web Design and Development Princ
+Instructor: R Kozak
+
+Group members: 
+
+1) Jaison Joseph - Student no: 7714660
+2) Sailesh Valiveti - Student No 7832116
+
+*/
+ 
 var http = require('http');
-/*var path = require('path');
-var express = require('express');
 
-var app=express();
-
-
-app.use(express.static(__dirname + '/client'));
-
-
-
-//
-// ## SimpleServer `SimpleServer(obj)`
-//
-// Creates a new instance of SimpleServer with the following options:
-//  * `port` - The HTTP port to listen on. If `process.env.PORT` is set, _it overrides this value_.
-//
-var router = express.Router();
-var server = http.createServer(router);
-
-// router.use(express.static(path.resolve(__dirname, 'client/view')));
-
-server.listen(process.env.PORT || 3000, process.env.IP || "0.0.0.0", function(){
-  var addr = server.address();
-  console.log("Server listening at", addr.address + ":" + addr.port);
-});
-
-app.get('/', function(req, res) {
-
-res.sendFile('/view/index.html', {
-	root: __dirname
-});
-
-});*/
 
 var express = require('express');
 var app = express();

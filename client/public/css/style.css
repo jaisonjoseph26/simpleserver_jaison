@@ -1,46 +1,13 @@
-/*body{
-font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif
-}
-.navbar-brand{
-	background-image: url("https://www.instagram.com/static/sprites/core/d21416.png");
-	background-position:-177px 0;
-}
+/*PROG8165 - Web Design and Development Princ
+Instructor: R Kozak
 
-#container-insta {
+Group members: 
 
-	margin:0 15% 0 15%;
-
-}
-
-.menu-sprite-link1{
-	background-position: -242px -272px;
-}
-
-.link1{
-	background-image: url("https://www.instagram.com/static/sprites/core/d21416.png");
-
-}
-
-.menu-sprite-link2
-{
-	background-position:-130px -322px;
-}
-
-
-.menu-sprite-link3
-{
-	background-position:-78px -322px;
-}
-
-.footer-men1 ul{
-	margin: 0 auto;
-    width: 620px;
-}
-
-
-
+1) Jaison Joseph - Student no: 7714660
+2) Sailesh Valiveti - Student No 7832116
 
 */
+
 
 
 nav.navbar {
@@ -110,8 +77,8 @@ nav i.fa.fa-instagram.hidden-sm.hidden-xs {
 	text-align: center;
 
 }
-@media screen and ( max-width: 991px ) {
-
+/*Media queries for mobile versions*/
+@media screen and ( max-width: 991px ) {  
 .lpanel {
 	text-align:center;
 }	
