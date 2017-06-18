@@ -56,15 +56,15 @@ post.save(function (err) {
 
 
 //tell the router (ie. express) where to find static files
-app.use(express.static(path.resolve(__dirname, 'client')));
+app.use(express.static(__dirname + '/client/public'));
 //tell the router to parse JSON data for us and put it into req.body
-var bodyParser = require('body-parser')
+var bodyParser = require('body-parser');
 
 
-app.use(bodyParser.urlencoded({ extended: false }))
+app.use(bodyParser.urlencoded({ extended: false }));
 
-// parse application/json
-app.use(bodyParser.json())
+// one of the parsers to parse in json
+app.use(bodyParser.json());
 
 
 app.get('/',function(req, res){
@@ -75,21 +75,17 @@ app.get('/',function(req, res){
 app.post('/posts', function(req, res){
   console.log('client requests posts list');
   
-  //go find all the posts in the database
+  //get all posts
   Posts.find({})
   .then(function(paths){
-    //send them to the client in JSON format
+    //posts send to the index.html for disolaying the posts
     res.json(paths);
   })
   
-  //this code just creates some posts directly without going to the database
-  res.json([
-   {postImage: 'img/testing.jpg', postComment: 'test message 1'},
-    {postImage: 'img/testing.jpg', postComment: 'test message 2'}
-  ]);
+
 });
 
 
 var server = app.listen(process.env.PORT || 3000, function(){
-    console.log("Server is listening...")
+    console.log("Server is listening...");
 })

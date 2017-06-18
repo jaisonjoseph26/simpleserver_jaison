@@ -20,35 +20,37 @@ Group members:
     <link rel="stylesheet" href="/bootstrap-3.3.7-dist/css/bootstrap.min.css">
       <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
 
-  <link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet">
 
-    <link rel="stylesheet" href="../css/style.css">  
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <link rel="stylesheet" href="../css/style.css"> 
+    <link rel="stylesheet" href="../css/style.css"> 
+    <script src="../js/jquery.min.js"></script>
+
     <script src="/bootstrap-3.3.7-dist/js/bootstrap.min.js"></script>
     <script type="text/javascript">
       
-      //onLoad function, to be executed when page is completed loaded by browser
+      //the onload function to be execute as declared in body tAG
             function onload(){
-                //start a promise chain
+                
                 Promise.resolve()
                 .then(function(){
-                    //jQuery function to request all the posts from the server
-                    //the 'return' is required. Otherwise, the subsequent then will not wait for this to complete
+                    
+                    // Call the page with url posts using the http verb post
                     return $.post('posts');  
                 })
-                //when the server responds, we'll execute this code
+               
                 .then(function(posts){
-                    //jQuery function to set the innerHTML of the div with id = 'posts' to empty
+                    //on success , empty the DOM ad prepare for displaying the post 
                     $('#posts').html('');
-                    //loop over each post item in the posts array
+                    
                     posts.forEach(function(post){
-                        //jQuery function to append to the innterHTML of the div with id = 'posts'
+                       //append the psots to the DOM
                         $('#posts').append(
                           
                           '<div class="listing-outer col-md-12">'+
                             '<div class="listing-inner">'+
                               '<div class="top">'+
-                                '<img class="img-circle" src="' + post._id + '" alt="iamge">'+
+                                '<img class="img-circle" src="http://placehold.it/300x300" alt="iamge">'+
                                 '<span>Jaison</span>'+
                                 
                               '</div>'+
@@ -61,14 +63,14 @@ Group members:
                     });
                 })
                 .catch(function(err){
-                    //always include a catch for exceptions
+                   
                     console.log(err);
                 });
             }
         
     </script>
   </head>
-  <body>
+    <body onload="onload();">
 
 <header>
 
@@ -103,37 +105,7 @@ Group members:
 <!-- fluid-container -->
     <div id="posts" class="container">
 
-          <div class="listing-outer col-md-12">
-            <div class="listing-inner">
-              <div class="top">
-                <img class="img-circle" src="http://placehold.it/300x300" alt="iamge" class="img-circle">
-                <span>Jaison</span>
-                <span class="pull-right">1d</span>
-              </div>
-              <div class="middle">
-                <img class="image-main" src="http://placehold.it/500x400" />
-              </div>
-              <div class="bottom">
 
-              </div>
-            </div>
-          </div>
-
-          <div class="listing-outer col-md-12">
-            <div class="listing-inner">
-              <div class="top">
-              <img class="img-circle" src="http://placehold.it/300x300" alt="iamge" class="img-circle">
-              <span>Sailesh</span>
-              <span class="pull-right">1d</span>
-              </div>
-              <div class="middle">
-                <img class="image-main" src="http://placehold.it/500x400" />
-              </div>
-              <div class="bottom">
-
-              </div>
-            </div>
-          </div>
 
     </div>
     <!-- /fluid-container -->

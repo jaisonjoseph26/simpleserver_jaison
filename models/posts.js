@@ -5,7 +5,7 @@ var mongoose = require('mongoose');
 module.exports = mongoose.model('Posts', {
    userId: String, //references userId from user table
    postImage: String, //image file link
-   postComment: String, //pcomment on the post
+   postComment: String, //comment on the post
    postLikeCount: Number, //total post likea
    postFeedbackCount: Number //total post reply count
 });
