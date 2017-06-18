@@ -25,7 +25,48 @@ Group members:
     <link rel="stylesheet" href="../css/style.css">  
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <script src="/bootstrap-3.3.7-dist/js/bootstrap.min.js"></script>
-
+    <script type="text/javascript">
+      
+      //onLoad function, to be executed when page is completed loaded by browser
+            function onload(){
+                //start a promise chain
+                Promise.resolve()
+                .then(function(){
+                    //jQuery function to request all the posts from the server
+                    //the 'return' is required. Otherwise, the subsequent then will not wait for this to complete
+                    return $.post('posts');  
+                })
+                //when the server responds, we'll execute this code
+                .then(function(posts){
+                    //jQuery function to set the innerHTML of the div with id = 'posts' to empty
+                    $('#posts').html('');
+                    //loop over each post item in the posts array
+                    posts.forEach(function(post){
+                        //jQuery function to append to the innterHTML of the div with id = 'posts'
+                        $('#posts').append(
+                          
+                          '<div class="listing-outer col-md-12">'+
+                            '<div class="listing-inner">'+
+                              '<div class="top">'+
+                                '<img class="img-circle" src="' + post._id + '" alt="iamge">'+
+                                '<span>Jaison</span>'+
+                                
+                              '</div>'+
+                             '<div class="middle">'+
+                                '<img class="image-main" src="'+post.postImage+'"/>' +
+                              '</div>'+
+                              '<div class="bottom"></div></div></div>'
+                          
+                        );
+                    });
+                })
+                .catch(function(err){
+                    //always include a catch for exceptions
+                    console.log(err);
+                });
+            }
+        
+    </script>
   </head>
   <body>
 
@@ -60,7 +101,7 @@ Group members:
 <div class="main-wrapper">
 
 <!-- fluid-container -->
-    <div class="container">
+    <div id="posts" class="container">
 
           <div class="listing-outer col-md-12">
             <div class="listing-inner">
