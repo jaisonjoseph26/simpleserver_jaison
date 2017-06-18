@@ -40,7 +40,7 @@ kitty.save(function (err) {
 // routing setup
 
 var post = new Posts({ 
-  postImage: './img/glyphicons-halflings-white.png',
+  postImage: './img/glyphicons-halflings-white.jpg',
   postComment: 'cool glphicon',
   postLikeCount: 0,
   postFeedbackCount: 0
