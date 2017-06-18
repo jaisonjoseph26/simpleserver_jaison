@@ -1,4 +1,4 @@
-//since we'll be creating a mongoose model for our post, we need to include the mongoose module
+//mongoose module imported
 var mongoose = require('mongoose');
 
 //below model contains all the image posts
