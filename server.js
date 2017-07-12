@@ -21,7 +21,16 @@ var fs = require('fs');
 var mongoose = require('mongoose');
 
 mongoose.connect('mongodb://admin_insta:admin123@ds019038.mlab.com:19038/insta_mongodb');
-mongoose.Promise = require('bluebird');
+//tell the router (ie. express) where to find static files
+app.use(express.static(__dirname + '/client/public'));
+//tell the router to parse JSON data for us and put it into req.body
+var bodyParser = require('body-parser');
+//mongoose.Promise = require('bluebird');
+app.use(bodyParser.urlencoded({ extended: false }));
+
+// one of the parsers to parse in json
+app.use(bodyParser.json());
+
 var Posts = require('./models/posts.js'); // include the posts model
 
 //var cat = mongoose.model('cat', { name: string });
@@ -55,16 +64,8 @@ post.save(function (err) {
 });
 
 
-//tell the router (ie. express) where to find static files
-app.use(express.static(__dirname + '/client/public'));
-//tell the router to parse JSON data for us and put it into req.body
-var bodyParser = require('body-parser');
 
 
-app.use(bodyParser.urlencoded({ extended: false }));
-
-// one of the parsers to parse in json
-app.use(bodyParser.json());
 
 
 app.get('/',function(req, res){
