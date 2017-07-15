@@ -33,6 +33,7 @@ Group members:
 
     $(document).ready(function(){
       
+      // ref: function obtained from https://stackoverflow.com/questions/901115/how-can-i-get-query-string-values-in-javascript
        function getParameterByName(name, url) {
           if (!url) url = window.location.href;
           name = name.replace(/[\[\]]/g, "\\$&");
@@ -120,7 +121,9 @@ Group members:
     
         <div class="col-md-6 col-md-offset-4">
           <p id="success_msg"></p>
-          <p>Login</p>
+          <p id="error"></p>
+
+          <h2>Login</h2>
               <form id="insta_join">
                         <div class="form-group">
                           <label for="exampleInputEmail1">Email address</label>
@@ -135,8 +138,8 @@ Group members:
               </form>
               
               <div>
-                <p>Are you a new user? <a href="/signup">Signup!</a></p>
-                <p>Forgot password> Click <a href="/passwordreset">here</a></p>
+                <p>Are you a new user? <a href="/join">Signup!</a></p>
+                <p>Forgot password? Click <a href="/passwordreset">here</a></p>
 
                 
               </div>

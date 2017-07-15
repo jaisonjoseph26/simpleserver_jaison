@@ -43,12 +43,11 @@ Group members:
                         return $.post('join', 'username=' + email + '&password=' + password);
                     })
                     .then(function(auth){
-                                                 
-
+                      
                         if (auth.isValid){
                            console.log("jaison_signinvalid");
                             $('#error').text = '';
-                            window.location.replace('signin');
+                            window.location.replace('/');
                         } else {
                             $('#error').html(auth.message);
                             $('#email').html('');
@@ -104,7 +103,10 @@ Group members:
 
     
         <div class="col-md-6 col-md-offset-4">
-                    <p>Signup</p>
+          
+            <p id="success_msg"></p>
+            <p id="error"></p>
+                    <h2>>Signup</h2>
 
               <form id="insta_join">
                         <div class="form-group">
@@ -123,8 +125,8 @@ Group members:
               </form>
               
               <div>
-                <p>Are you a new user? <a href="/signin">Signin!</a></p>
-                <p>Forgot password> Click <a href="/passwordreset">here</a></p>
+                <p>Are you a new user? <a href="/">Signin!</a></p>
+                <p>Forgot password? Click <a href="/passwordreset">here</a></p>
               </div>
         </div>
         
