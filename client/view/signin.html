@@ -27,49 +27,8 @@ Group members:
     <script src="../js/jquery.min.js"></script>
 
     <script src="/bootstrap-3.3.7-dist/js/bootstrap.min.js"></script>
-    <script type="text/javascript">
-      /*global $*/
-      //the onload function to be execute as declared in body tAG
-            function onload(){
-                
-                Promise.resolve()
-                .then(function(){
-                    
-                    // Call the page with url posts using the http verb post
-                    return $.post('posts');  
-                })
-               
-                .then(function(posts){
-                    //on success , empty the DOM ad prepare for displaying the post 
-                    $('#posts').html('');
-                    
-                    posts.forEach(function(post){
-                       //append the psots to the DOM
-                        $('#posts').append(
-                          
-                          '<div class="listing-outer col-md-12">'+
-                            '<div class="listing-inner">'+
-                              '<div class="top">'+
-                                '<img class="img-circle" src="http://placehold.it/300x300" alt="iamge">'+
-                                '<span>Jaison</span>'+
-                                
-                              '</div>'+
-                             '<div class="middle">'+
-                                '<img class="image-main" src="'+post.postImage+'"/>' +
-                              '</div>'+
-                              '<div><p>'+post.postComment+'</p></div>'+
-                              '<div class="bottom"></div></div></div>'
-                          
-                        );
-                    });
-                })
-                .catch(function(err){
-                   
-                    console.log(err);
-                });
-            }
-        
-    </script>
+    
+     
   </head>
     <body > <!--onload function gets called here -->
 
@@ -105,6 +64,31 @@ Group members:
 
 
     <div id="posts" class="container">
+
+
+    
+        <div class="col-md-6 col-md-offset-4">
+          <p>Login</p>
+              <form id="insta_join">
+                        <div class="form-group">
+                          <label for="exampleInputEmail1">Email address</label>
+                          <input id="join_email" type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Enter email">
+                        </div>
+                        <div class="form-group">
+                          <label for="exampleInputPassword1">Password</label>
+                          <input id="join_password" type="password" class="form-control" id="exampleInputPassword1" placeholder="Password">
+                        </div>
+                        
+                        <button type="submit" class="btn btn-primary" onclick="handleJoinAttempt()">Submit</button>
+              </form>
+              
+              <div>
+                <p>Are you a new user? <a href="/signup">Signup!</a></p>
+                <p>Forgot password> Click <a href="/signup">here</a></p>
+
+                
+              </div>
+        </div>
 
 
 
