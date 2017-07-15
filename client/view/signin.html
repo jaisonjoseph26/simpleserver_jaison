@@ -28,6 +28,57 @@ Group members:
 
     <script src="/bootstrap-3.3.7-dist/js/bootstrap.min.js"></script>
     
+    <script>
+          /*global $*/
+
+    $(document).ready(function(){
+      
+       function getParameterByName(name, url) {
+          if (!url) url = window.location.href;
+          name = name.replace(/[\[\]]/g, "\\$&");
+          var regex = new RegExp("[?&]" + name + "(=([^&#]*)|&|#|$)"),
+              results = regex.exec(url);
+          if (!results) return null;
+          if (!results[2]) return '';
+          return decodeURIComponent(results[2].replace(/\+/g, " "));
+    }
+    
+    var msg = getParameterByName('msg');
+    if(msg==='reset_success'){
+          $('#success_msg').html("Hurray, your password is reset successfully, please login to continue.");
+    }
+    });
+     
+    </script>
+            <script>
+            /*global $*/
+            function handleSigninAttempt(){
+                var email = $('#email').val();
+                var password = $('#password').val();
+                
+                if (email.length > 0 && password.length > 0){
+                    Promise.resolve()
+                    .then(function(){
+                        return $.post('signin', 'username=' + email + '&password=' + password);
+                    })
+                    .then(function(auth){
+                        if (auth.isValid){
+                            $('#error').text = '';
+                            window.location.replace('index');
+                        } else {
+                            $('#error').html(auth.message);
+                            $('#email').html('');
+                            $('#password').html('');
+                        }
+                    })
+                    .catch(function(err){
+                        console.log(err);
+                    })
+                } else {
+                    $('#error').html('Please provide both username and password');
+                }
+            }
+        </script>
      
   </head>
     <body > <!--onload function gets called here -->
@@ -68,23 +119,24 @@ Group members:
 
     
         <div class="col-md-6 col-md-offset-4">
+          <p id="success_msg"></p>
           <p>Login</p>
               <form id="insta_join">
                         <div class="form-group">
                           <label for="exampleInputEmail1">Email address</label>
-                          <input id="join_email" type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Enter email">
+                          <input id="email" type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Enter email">
                         </div>
                         <div class="form-group">
                           <label for="exampleInputPassword1">Password</label>
-                          <input id="join_password" type="password" class="form-control" id="exampleInputPassword1" placeholder="Password">
+                          <input id="password" type="password" class="form-control" id="exampleInputPassword1" placeholder="Password">
                         </div>
                         
-                        <button type="submit" class="btn btn-primary" onclick="handleJoinAttempt()">Submit</button>
+                        <button type="button" class="btn btn-primary" onclick="handleSigninAttempt()">Submit</button>
               </form>
               
               <div>
                 <p>Are you a new user? <a href="/signup">Signup!</a></p>
-                <p>Forgot password> Click <a href="/signup">here</a></p>
+                <p>Forgot password> Click <a href="/passwordreset">here</a></p>
 
                 
               </div>

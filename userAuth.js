@@ -6,13 +6,14 @@ const hash = require('./utils/hash.js');
 module.exports.init = function(passport){
 	// Passport needs to be able to serialize and deserialize users to support persistent login sessions
     passport.serializeUser(function(user, callback) {
-        console.log('serializing user: ' + user.username);
+        
+        console.log('serializing user: ' + user.email);
         callback(null, user._id);
     });
 
     passport.deserializeUser(function(id, callback) {
         User.findById(id, function(err, user) {
-            console.log('deserializing user: ' + user.username);
+            console.log('deserializing user: ' + user.email);
             callback(err, user);
         });
     });
@@ -42,19 +43,28 @@ module.exports.isAuthenticated = function (req, res, next) {
 function handleLoginAttempt(email, password, cb){
     //don't log user's passwords in plain text to the console in production
     console.log('userAuth: handleLoginAttempt: email: ' + email + ' password: ' + password);
+                    console.log("here3");
+
     
     Promise.resolve()
     .then(function(){
+        console.log("here"+User.findOne({'email' : email})+email);
+        console.log(email)
         //see if there's a user with this email
         return User.findOne({'email' : email});
     })
     .then(function(user){
+
         var param = false;
         //if the user exists and the hash of the password provided matches
-        if (user && hash.isValid(user, password))
+        if (user && hash.isValid(user, password)){
             //return the user object
             param = user;
+            console.log("here2");
+
+        }
         //execute the callback with appropriate parameters
+
         cb(null, param);
     })
     .catch(function(err){
@@ -72,6 +82,7 @@ function handleSignupAttempt(email, password, cb){
     Promise.resolve()
     .then(function(){
         //see if there's a user with this email
+        console.log(User.collection.collectionName);
         return User.findOne({'email' : email});
     })
     .then(function(user){

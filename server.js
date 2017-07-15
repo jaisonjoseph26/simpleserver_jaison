@@ -23,6 +23,9 @@ const mongoSession = require('connect-mongodb-session')(session);
 const userAuth = require('./userAuth.js');
 const hash = require('./utils/hash.js');
 var mongoose = require('mongoose');
+const PasswordReset = require('./models/PasswordReset.js');
+const email = require('./utils/sendmail.js');
+
 
 
 
@@ -44,6 +47,7 @@ app.use(express.static(__dirname + '/client/public'));
 var bodyParser = require('body-parser');
 mongoose.Promise = require('bluebird');
 
+mongoose.set('debug', true);
 
 app.use(bodyParser.urlencoded({ extended: false }));
 
@@ -64,7 +68,6 @@ userAuth.init(passport);
 //models
 var Posts = require('./models/posts.js'); // include the posts model
 const User = require('./models/user.js');
-
 //var cat = mongoose.model('cat', { name: string });
 
 /*/var kitty = new cat({ name: 'zildjian' });
@@ -111,6 +114,7 @@ app.get('/',function(req, res){
 //tell the router how to handle a post request to the join page
 app.post('/join', function(req, res, next) {
   passport.authenticate('signup', function(err, user, info) {
+    console.log("jaison_insidepassportwelcometop");
     if (err){
       res.json({isValid: false, message: 'internal error'});    
     } else if (!user) {
@@ -118,9 +122,10 @@ app.post('/join', function(req, res, next) {
     } else {
       //log this user in since they've just joined
       req.logIn(user, function(err){
-        if (!err)
+        if (!err){console.log("jaison_insidepassportwelcome");
           //send a message to the client to say so
           res.json({isValid: true, message: 'welcome ' + user.email});
+        }
       });
     }
   })(req, res, next);
@@ -130,9 +135,91 @@ app.post('/join', function(req, res, next) {
 //Route to take user to the signin page
 app.get('/signin', function(req, res){
   console.log('client requests signin');
-  res.redirect('/');
+    res.sendFile(path.join(__dirname+'/client/view/signin.html'));
+
+  //res.redirect('/');
 });
 
+//tell the router how to handle a post request from the signin page
+app.post('/signin', function(req, res, next) {
+  //tell passport to attempt to authenticate the login
+  passport.authenticate('login', function(err, user, info) {
+    //callback returns here
+    if (err){
+      //if error, say error
+      res.json({isValid: false, message: 'internal error'});
+    } else if (!user) {
+      //if no user, say invalid login
+      res.json({isValid: false, message: 'try again'});
+    } else {
+      //log this user in
+      req.logIn(user, function(err){
+        if (!err)
+        { console.log("inside_login_server.js");
+          //send a message to the client to say so
+          res.json({isValid: true, message: 'welcome ' + user.email});
+        }
+      });
+    }
+  })(req, res, next);
+});
+
+app.get('/passwordreset', (req, res) => {
+  console.log('client requests passwordreset');
+  res.sendFile(path.join(__dirname, 'client/view', 'passwordreset.html'));
+});
+
+app.post('/passwordreset', (req, res) => {
+    Promise.resolve()
+    .then(function(){
+        //see if there's a user with this email
+        return User.findOne({'email' : req.body.email});
+    })
+    .then(function(user){
+      if (user){
+        var pr = new PasswordReset();
+        pr.userId = user.id;
+        pr.password = hash.createHash(req.body.password);
+        pr.expires = new Date((new Date()).getTime() + (20 * 60 * 1000));
+        pr.save()
+        .then(function(pr){
+          if (pr){
+            email.send(req.body.email, 'password reset', 'https://node-app-jaisonjoseph26.c9users.io/verifypassword?id=' + pr.id);
+          }
+        });
+      }
+    })
+});
+
+app.get('/verifypassword', function(req, res){
+    var password;
+    Promise.resolve()
+    .then(function(){
+           
+
+      return PasswordReset.findOne({_id: req.query.id});
+    })
+    .then(function(pr){
+      console.log("qwerty"+pr);
+      if (pr){
+        if (pr.expires > new Date()){
+          password = pr.password;
+          //see if there's a user with this email
+          return User.findOne({_id : pr.userId});
+        }
+      }
+    })
+    .then(function(user){
+      if (user){
+        user.password = password;
+         user.save();
+         var msg="reset_success"
+          res.redirect('/signin?msg=' + msg);
+
+
+      }
+    })
+});
 
 
 //tell the router how to handle a post request to /posts
