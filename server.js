@@ -98,7 +98,7 @@ post.save(function (err) {
 
 
 
-app.get('/index',function(req, res){
+app.get('/index',userAuth.isAuthenticated,function(req, res){
   res.sendFile(path.join(__dirname+'/client/view/index.html'));
 });
 
@@ -185,7 +185,7 @@ app.post('/passwordreset', (req, res) => {
           }
         });
       }
-    })
+    });
 });
 
 app.get('/verifypassword', function(req, res){
