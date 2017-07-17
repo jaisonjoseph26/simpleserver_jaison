@@ -35,11 +35,12 @@ Group members:
                 var password = $('#join_password').val();
                 var repeatPassword = $('#join_confirm_password').val();
                 console.log("outside valid");
-                
+                //Perform validation of the form inputs
                 if (email.length > 0 && password.length > 0 && repeatPassword.length > 0 && password == repeatPassword){
 
                     Promise.resolve()
                     .then(function(){
+                      //send the email and password to the post route
                         return $.post('join', 'username=' + email + '&password=' + password);
                     })
                     .then(function(auth){
@@ -47,8 +48,10 @@ Group members:
                         if (auth.isValid){
                            console.log("jaison_signinvalid");
                             $('#error').text = '';
+                            //redirect user to the siginin page
                             window.location.replace('/');
                         } else {
+                          //display error message
                             $('#error').html(auth.message);
                             $('#email').html('');
                             $('#password').html('');
@@ -106,7 +109,7 @@ Group members:
           
             <p id="success_msg"></p>
             <p id="error"></p>
-                    <h2>>Signup</h2>
+                    <h2>Signup</h2>
 
               <form id="insta_join">
                         <div class="form-group">

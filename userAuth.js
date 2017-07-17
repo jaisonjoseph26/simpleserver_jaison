@@ -1,4 +1,4 @@
-const User = require('./models/user.js');
+const User = require('./models/User.js');
 const LocalStrategy = require('passport-local').Strategy;
 const hash = require('./utils/hash.js');
 
@@ -77,7 +77,7 @@ function handleLoginAttempt(email, password, cb){
 //passport will call this function when someone attempts to join
 function handleSignupAttempt(email, password, cb){
     //don't log user's passwords in plain text to the console in production
-    console.log('userAuth: handleSignupAttempt: email: ' + email + ' password: ' + password);
+    //console.log('userAuth: handleSignupAttempt: email: ' + email + ' password: ' + password);
     
     Promise.resolve()
     .then(function(){

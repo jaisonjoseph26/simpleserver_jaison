@@ -71,8 +71,8 @@ userAuth.init(passport);
 
 
 //models
-var Posts = require('./models/posts.js'); // include the posts model
-const User = require('./models/user.js');
+var Posts = require('./models/Posts.js'); // include the posts model
+const User = require('./models/User.js');
 const PasswordReset = require('./models/PasswordReset.js');
 
 //added to posts table
@@ -97,10 +97,13 @@ post.save(function (err) {
 
 
 
-
+/* route to take user to the posts page,
+the 'userAuth.isAuthenticated' parameter is like a middleware to check if the user accessing the post page is logged in or not */
 app.get('/index',userAuth.isAuthenticated,function(req, res){
   res.sendFile(path.join(__dirname+'/client/view/index.html'));
 });
+
+// route to take user to the join page
 
 app.get('/join',function(req, res){
   res.sendFile(path.join(__dirname+'/client/view/join.html'));
@@ -109,7 +112,6 @@ app.get('/join',function(req, res){
 //tell the router how to handle a post request to the join page
 app.post('/join', function(req, res, next) {
   passport.authenticate('signup', function(err, user, info) {
-    console.log("jaison_insidepassportwelcometop");
     if (err){
       res.json({isValid: false, message: 'internal error'});    
     } else if (!user) {
@@ -159,6 +161,20 @@ app.post('/signin', function(req, res, next) {
   })(req, res, next);
 });
 
+//tell the router how to handle a post request to /posts
+app.post('/posts', function(req, res){
+  console.log('client requests posts list');
+  
+  //get all posts
+  Posts.find({})
+  .then(function(paths){
+    //posts send to the index.html for disolaying the posts
+    res.json(paths);
+  });
+  
+
+});
+
 app.get('/passwordreset', (req, res) => {
  // console.log('client requests passwordreset');
   res.sendFile(path.join(__dirname, 'client/view', 'passwordreset.html'));
@@ -179,6 +195,7 @@ app.post('/passwordreset', (req, res) => {
         pr.save()
         .then(function(pr){
           if (pr){
+            //below line sends the email and we have passed the to address, subject and body as parameters
             email.send(req.body.email, 'password reset', 'https://node-app-jaisonjoseph26.c9users.io/verifypassword?id=' + pr.id);
           res.json("mail_sent");
             
@@ -192,12 +209,12 @@ app.get('/verifypassword', function(req, res){
     var password;
     Promise.resolve()
     .then(function(){
-           
-
+    //Find a user using the id you got in the url query string
       return PasswordReset.findOne({_id: req.query.id});
     })
     .then(function(pr){
       if (pr){
+        //check for expiry date
         if (pr.expires > new Date()){
           password = pr.password;
           //see if there's a user with this email
@@ -209,30 +226,17 @@ app.get('/verifypassword', function(req, res){
       if (user){
         user.password = password;
          user.save();
-         var msg="reset_success"
+         // once user credentials is updated in the users collection, redirect user to the signin page with a success message
+         var msg="reset_success";
           res.redirect('/?msg=' + msg);
 
 
       }
-    })
+    });
 });
 
-
-//tell the router how to handle a post request to /posts
-app.post('/posts', function(req, res){
-  console.log('client requests posts list');
-  
-  //get all posts
-  Posts.find({})
-  .then(function(paths){
-    //posts send to the index.html for disolaying the posts
-    res.json(paths);
-  })
-  
-
-});
 
 
 var server = app.listen(process.env.PORT || 3000, function(){
     console.log("Server is listening...");
-})
+});
