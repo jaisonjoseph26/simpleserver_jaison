@@ -1,13 +1,17 @@
-This example showcases how to serve up a static web page using the `express` server.
+Readme:
 
-## Running the server
+This is part of the instagram clone project for the PROG8165- Web Design and Development Princ.
 
-1) Open `server.js` and start the app by clicking on the "Run" button in the top menu.
+References:
 
-2) Alternatively you can launch the app from the Terminal:
+1) https://github.com/rtbsoft/simplestserver
 
-    $ node server.js
+Project Github link:  https://github.com/jaisonjoseph26/simpleserver_jaison
 
-Once the server is running, open the project in the shape of 'https://projectname-username.c9users.io/'. Visiting that site should render index.html.
+Cloud9 link: https://node-app-jaisonjoseph26.c9users.io/
 
-So this is my first edit in readme file
+Presented by:
+
+Jaison Joseph Student no: 7714660
+
+Sailesh Valiveti Student no: 7832116
