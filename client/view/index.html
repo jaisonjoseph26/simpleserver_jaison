@@ -13,183 +13,257 @@ Group members:
 
 <!doctype html>
 <html lang="en">
-  <head>
-    <title>Simplest Website</title>
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="/bootstrap-3.3.7-dist/css/bootstrap.min.css">
-      <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
 
-    <link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet">
+<head>
+  <title>Simplest Website</title>
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="/bootstrap-3.3.7-dist/css/bootstrap.min.css">
+  <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
 
-    <link rel="stylesheet" href="../css/style.css"> 
-    <link rel="stylesheet" href="../css/style.css"> 
-    <script src="../js/jquery.min.js"></script>
+  <link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet">
 
-    <script src="/bootstrap-3.3.7-dist/js/bootstrap.min.js"></script>
-    <script type="text/javascript">
-      /*global $*/
-      //the onload function to be execute as declared in body tAG
-            function onload(){
-                
-                Promise.resolve()
-                .then(function(){
-                    
-                    // Call the page with url posts using the http verb post
-                    return $.post('posts');  
-                })
-               
-                .then(function(posts){
-                    //on success , empty the DOM ad prepare for displaying the post 
-                    $('#posts').html('');
-                    
-                    posts.forEach(function(post){
-                       //append the psots to the DOM
-                        $('#posts').append(
-                          
-                          '<div class="listing-outer col-md-12">'+
-                            '<div class="listing-inner">'+
-                              '<div class="top">'+
-                                '<img class="img-circle" src="http://placehold.it/300x300" alt="iamge">'+
-                                '<span>Jaison</span>'+
-                                
-                              '</div>'+
-                             '<div class="middle">'+
-                                '<img class="image-main" src="'+post.postImage+'"/>' +
-                              '</div>'+
-                              '<div><p>'+post.postComment+'</p></div>'+
-                              '<div class="bottom"></div></div></div>'
-                          
-                        );
-                    });
-                })
-                .catch(function(err){
-                   
-                    console.log(err);
-                });
-            }
-        
-    </script>
-  </head>
-    <body onload="onload();" > <!--onload function gets called here -->
+  <link rel="stylesheet" href="../css/style.css">
+  <link rel="stylesheet" href="../css/style.css">
+  <script src="../js/jquery.min.js"></script>
 
-<header>
+  <script src="/bootstrap-3.3.7-dist/js/bootstrap.min.js"></script>
+  <script type="text/javascript">
+    /*global $*/
 
-  <!-- NAVIGATION -->
-<nav class="navbar">
-  <div class="container">
-    <div class="col-md-4 lpanel col-sm-12 col-xs-12">
-    <i class="fa fa-instagram hidden-sm hidden-xs" aria-hidden="true"></i> Instagram
-    </div>
-    <div class="col-md-4 hidden-sm hidden-xs">
-    <div class="input-group">
-      <input type="text" class="form-control" placeholder="Search for...">
-      <span class="input-group-btn">
+    function likeClick(id) {
+      Promise.resolve()
+        .then(function() {
+          //jQuery provides a nice convenience method for easily sending a post with parameters in JSON
+          //here we pass the ID to the incrLike route on the server side so it can do the incrementing for us
+          //note the return. This MUST be here, or the subsequent then will not wait for this to complete
+          return $.post('incrLike', { id: id });
+        })
+        .then(function(like) {
+          alert(like.count + "joseph");
+          if (like.count > 0) {
+            alert(like.count + "jsiodn");
+            alert('#count-value-' + like.id);
+            //jQuery provides a nice convenience methot for easily setting the count to the value returned
+            $('#count-value-' + like.id).html(like.count);
+
+          }
+
+        })
+        .catch(function(err) {
+          //always include a catch for the promise chain
+          console.log(err);
+        });
+    }
+
+    //upload picture handler
+    function uploadClick() {
+      //go get the data from the form
+      var form = new FormData($("#uploadForm")[0]);
+      var form = new FormData($("#uploadForm")[0]);
+      for (var pair of form.entries()) {
+        console.log(pair[0] + ', ' + pair[1]);
+      }
+
+      //we can post this way as well as $.post
+      $.ajax({
+        url: '/upload',
+        method: "POST",
+        dataType: 'json',
+        //the form object is the data
+        data: form,
+        //we want to send it untouched, so this needs to be false
+        processData: false,
+        contentType: false,
+        //add a message 
+        success: function(result) {
+          
+          
+        },
+        error: function(er) {}
+      });
+    }
+
+
+
+    //the onload function to be execute as declared in body tAG
+    function onload() {
+
+      Promise.resolve()
+        .then(function() {
+
+          // Call the page with url posts using the http verb post
+          return $.post('posts');
+        })
+
+        .then(function(posts) {
+          //on success , empty the DOM ad prepare for displaying the post 
+          $('#posts').html('');
+
+          posts.forEach(function(post) {
+            //append the psots to the DOM
+            $('#posts').append(
+
+              '<div class="listing-outer col-md-12">' +
+              '<div class="listing-inner">' +
+              '<div class="top">' +
+              '<img class="img-circle" src="http://placehold.it/300x300" alt="image">' +
+              '<span>Jaison</span>' +
+              '</div>' +
+              '<div class="middle">' +
+              '<img class="image-main" src="' + post.postImage + '"/>' +
+              '</div>' +
+              '<div class="bottom">' +
+              '<a   onclick="likeClick(\'' + post._id + '\');"  class="like-link" data-post-id="' + post._id + '" href="javascript:"><i class="fa fa-heart-o fa-3x" aria-hidden="true"></i></a>' +
+              '<p class="like-count"><span id="count-value-' + post._id + '">' + post.postLikeCount + '</span> </p>' +
+              '</div></div></div>'
+            );
+          });
+        })
+        .catch(function(err) {
+
+          console.log(err);
+        });
+    }
+  </script>
+</head>
+
+<body onload="onload();">
+  <!--onload function gets called here -->
+
+  <header>
+
+    <!-- NAVIGATION -->
+    <nav class="navbar">
+      <div class="container">
+        <div class="col-md-4 lpanel col-sm-12 col-xs-12">
+          <i class="fa fa-instagram hidden-sm hidden-xs" aria-hidden="true"></i> Instagram
+        </div>
+        <div class="col-md-4 hidden-sm hidden-xs">
+          <div class="input-group">
+            <input type="text" class="form-control" placeholder="Search for...">
+            <span class="input-group-btn">
         <button class="btn btn-default" type="button">Go!</button>
       </span>
-    </div>
-    </div>
-    <div class="col-md-4 hidden-sm hidden-xs">
-      <div class="text-center rpanel">
-      <i class="fa fa-map-o" aria-hidden="true"></i>
-      <i class="fa fa-heart-o" aria-hidden="true"></i>
-      <i class="fa fa-user-o" aria-hidden="true"></i>
+          </div>
+        </div>
+        <div class="col-md-4 hidden-sm hidden-xs">
+          <div class="text-center rpanel">
+            <a data-toggle="modal" data-target="#myModal" href="#" id="image-upload-anchor"><i class="fa fa-instagram" aria-hidden="true"></i></a>
+            <i class="fa fa-heart-o" aria-hidden="true"></i>
+            <i class="fa fa-user-o" aria-hidden="true"></i>
+          </div>
+        </div>
+
+      </div>
+    </nav>
+  </header>
+  <!-- main-wrapper for User Post Listings-->
+  <div class="main-wrapper">
+    <div class="upload-wrapper">
+      <!-- Modal -->
+      <div class="modal fade" id="myModal" role="dialog">
+        <div class="modal-dialog">
+
+          <!-- Modal content-->
+          <div class="modal-content">
+            <div class="modal-header">
+              <button type="button" class="close" data-dismiss="modal">&times;</button>
+              <h4 class="modal-title">Add a Picture</h4>
+            </div>
+            <div class="modal-body">
+              <form id="uploadForm" enctype="multipart/form-data" name="uploadForm" novalidate>
+                <input type="file" name="userPhoto" id="userPhoto" />
+              </form>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-default" data-dismiss="modal" onclick="uploadClick();">Send</button>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
-
-  </div>
-</nav>
-</header>
-<!-- main-wrapper for User Post Listings-->
-<div class="main-wrapper">
-
 
     <div id="posts" class="container">
 
 
 
     </div>
-   
-
-
-</div>
-<!-- /main-wrapper -->
-
-<!-- FOOTER -->
-    <div class="container">
 
 
 
-      <div class="listing-outer col-md-12">
+  </div>
+  <!-- /main-wrapper -->
+
+  <!-- FOOTER -->
+  <div class="container">
+
+
+
+    <div class="listing-outer col-md-12">
 
       <!-- FOOTER for desktop version -->
-      <div class="footer-inner hidden-sm hidden-xs">
-          <div class="footer-top">
-           <ul>
-                <li class="footer-menu ">About us</li>
-                <li class="footer-menu">Support</li>
-                <li class="footer-menu">Blog</li>
-                <li class="footer-menu">Press</li>
-                <li class="footer-menu">Api</li>
-                <li class="footer-menu">Jobs</li>
-            </ul>
+      <div class="footer-inner  hidden-sm hidden-xs">
+        <div class="footer-top">
+          <ul>
+            <li class="footer-menu ">About us</li>
+            <li class="footer-menu">Support</li>
+            <li class="footer-menu">Blog</li>
+            <li class="footer-menu">Press</li>
+            <li class="footer-menu">Api</li>
+            <li class="footer-menu">Jobs</li>
+          </ul>
 
 
 
-          </div>
-
-          <div class="footer-bottom">
-           <ul>
-                <li class="footer-menu">About us</li>
-                <li class="footer-menu">Support</li>
-                <li class="footer-menu">Blog</li>
-                <li class="footer-menu">Press</li>
-                <li class="footer-menu">Api</li>
-                <li class="footer-menu">Jobs</li>
-            </ul>
+        </div>
 
 
 
-          </div>
+        <div class="copyrights">
+          <p class="">&copy; 2017 INSTAGRAM</p>
 
-          <div class="copyrights">
-                    <p class="">&copy; 2017 INSTAGRAM</p>
-
-          </div>
+        </div>
 
       </div>
 
       <!-- FOOTER for mobile version -->
-      <div class="footer-mobile hidden-lg hidden-md">       
+      <div class="footer-mobile hidden-lg  hidden-sm">
 
 
-            <div class="col-sm-3">
+        <div class="col-sm-3">
 
-              <a href=""><i class="fa fa-home" aria-hidden="true"></i></a>
-              
-            </div>
+          <a href=""><i class="fa fa-home" aria-hidden="true"></i></a>
 
-            <div class="col-sm-3">
+        </div>
 
-              <a href=""><i class="fa fa-search" aria-hidden="true"></i></a>
-              
-            </div>
+        <div class="col-sm-3">
 
-            <div class="col-sm-3">
+          <a href=""><i class="fa fa-search" aria-hidden="true"></i></a>
 
-              <a href=""><i class="fa fa-heart-o" aria-hidden="true"></i></a>
-              
-            </div>
-            
-            <div class="col-sm-3">
+        </div>
 
-              <a href=""><i class="fa fa-map-o" aria-hidden="true"></i></a>
-              
-            </div>        
+        <div class="col-sm-3">
+
+          <a href=""><i class="fa fa-heart-o" aria-hidden="true"></i></a>
+
+        </div>
+
+        <div class="col-sm-3">
+
+          <a href=""><i class="fa fa-map-o" aria-hidden="true"></i></a>
+
+        </div>
 
       </div>
-      
+
     </div>
 
-  </body>
+</body>
+<footer>
+
+
+
+</footer>
+
 </html>

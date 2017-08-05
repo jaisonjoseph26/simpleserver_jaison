@@ -49,6 +49,17 @@ nav i.fa.fa-instagram.hidden-sm.hidden-xs {
 	height: auto;
 }
 
+.bottom{
+	height: 50px;
+    line-height: 50px;
+    padding: 10px 10px;
+	
+}
+.like-count{
+	display: inline;
+    font-size: 26px;
+}
+}
 .footer-inner{
 
 	max-width:600px;

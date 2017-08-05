@@ -17,6 +17,8 @@ var fs = require('fs');
 var express = require('express');
 var app = express();
 var bodyParser = require('body-parser');
+const fileUpload = require('express-fileupload');
+const Guid = require('guid');
 
 //modules neede to maintain session and perform authentication (passport) related tasks)
 
@@ -45,6 +47,7 @@ var mongoSessionStore = new mongoSession({
 // this helps to see your mongoose raw queries, useful for debugging
 mongoose.set('debug', true);
 
+
 app.use(express.static(__dirname + '/client/public'));
 
 
@@ -67,13 +70,15 @@ app.use(session({
 app.use(passport.initialize());
 app.use(passport.session());
 userAuth.init(passport);
-
-
+//add file upload support
+app.use(fileUpload());
 
 //models
 var Posts = require('./models/Posts.js'); // include the posts model
 const User = require('./models/User.js');
 const PasswordReset = require('./models/PasswordReset.js');
+const Like = require('./models/Like.js');
+
 
 //added to posts table
 // routing setup
@@ -162,7 +167,7 @@ app.post('/signin', function(req, res, next) {
 });
 
 //tell the router how to handle a post request to /posts
-app.post('/posts', function(req, res){
+/*app.post('/posts', function(req, res){
   console.log('client requests posts list');
   
   //get all posts
@@ -171,8 +176,71 @@ app.post('/posts', function(req, res){
     //posts send to the index.html for disolaying the posts
     res.json(paths);
   });
-  
+});*/
 
+app.post('/posts', userAuth.isAuthenticated, function(req, res){
+  console.log('client requests posts list');
+  
+  var thesePosts;
+  //go find all the posts in the database
+  Posts.find({})
+  .then(function(posts){
+    thesePosts = posts;
+    var promises = [];
+    thesePosts.forEach(function(post){
+      promises.push(
+        Promise.resolve()
+        .then(function(){
+          return Like.findOne({userId: req.user.id, postId: post.id})
+        })
+        .then(function(like){
+          post._doc.isLiked = like ? true : false;
+      }));
+    });
+    return Promise.all(promises);
+  })
+  .then(function(){
+    //send them to the client in JSON format
+    res.json(thesePosts);
+  })
+});
+
+
+//tell the router how to handle a post request to /incrLike
+app.post('/incrLike', userAuth.isAuthenticated, function(req, res){
+  console.log('increment like for ' + req.body.id + ' by user ' + req.user.email);
+
+  Like.findOne({userId: req.user.id, postId: req.body.id})
+  .then(function(like){
+    console.log(like+"sdfsdfsdsdf");
+    if (!like){
+      console.log("not like");
+      //go get the post record
+      Posts.findById(req.body.id)
+      .then(function(post){
+        //increment the like count
+        post.postLikeCount++;
+        //save the record back to the database
+        return post.save(post);
+      })
+      .then(function(post){
+        var like = new Like();
+        like.userId = req.user.id;
+        like.postId = req.body.id;
+        like.save();
+        
+        //a successful save returns back the updated object
+        res.json({id: req.body.id, count: post.postLikeCount});  
+      })
+    } else {
+            console.log("jaison like");
+
+        res.json({id: req.body.id, count: -1});  
+    }
+  })
+  .catch(function(err){
+    console.log(err);
+  })
 });
 
 app.get('/passwordreset', (req, res) => {
@@ -233,6 +301,78 @@ app.get('/verifypassword', function(req, res){
 
       }
     });
+});
+
+//tell the router how to handle a post request to upload a file
+app.post('/upload', userAuth.isAuthenticated, function(req, res) {
+  var response = {success: false, message: ''};
+  console.log("in here");
+        console.log(req.files);
+
+  if (req.files){
+      console.log(req.files + "jasdasadasdadasdasdasd");
+    // The name of the input field is used to retrieve the uploaded file 
+    var userPhoto = req.files.userPhoto;
+    //invent a unique file name so no conflicts with any other files
+    var guid = Guid.create();
+    //figure out what extension to apply to the file
+    var extension = '';
+    switch(userPhoto.mimetype){
+      case 'image/jpeg':
+        extension = '.jpg';
+        break;
+      case 'image/png':
+        extension = '.png';
+        break;
+      case 'image/bmp':
+        extension = '.bmp';
+        break;
+      case 'image/gif':
+        extension = '.gif';
+        break;
+    }
+    
+    //if we have an extension, it is a file type we will accept
+    if (extension){
+            console.log("in here3");
+
+      //construct the file name
+      var filename = guid + extension;
+      // Use the mv() method to place the file somewhere on your server 
+      userPhoto.mv('./client/public/img/' + filename, function(err) {
+        //if no error
+        if (!err){
+                console.log("in here5");
+
+          //create a post for this image
+          var post = new Posts();
+          post.userId = req.user.id;
+          post.postImage = './img/' + filename;
+          post.postLikeCount = 0;
+          post.postComment = '';
+          post.postFeedbackCount = 0;
+          //save it
+          post.save()
+          .then(function(){
+            res.json({success: true, message: 'all good'});            
+          })
+        } else {
+          response.message = 'internal error';
+          res.json(response);
+        }
+      });
+    } else {
+                      console.log("in here6");
+
+      response.message = 'unsupported file type';
+      res.json(response);
+    }
+  } else {
+                          console.log("in here7");
+
+    response.message = 'no files';
+    res.json(response);
+  }
 });
 
 
