@@ -183,7 +183,7 @@ app.post('/posts', userAuth.isAuthenticated, function(req, res){
   
   var thesePosts;
   //go find all the posts in the database
-  Posts.find({})
+  Posts.find().sort([['_id', 'descending']])
   .then(function(posts){
     thesePosts = posts;
     var promises = [];
@@ -195,6 +195,8 @@ app.post('/posts', userAuth.isAuthenticated, function(req, res){
         })
         .then(function(like){
           post._doc.isLiked = like ? true : false;
+
+          post._doc.likeColor = like? "like" : "nolike";
       }));
     });
     return Promise.all(promises);
@@ -375,7 +377,10 @@ app.post('/upload', userAuth.isAuthenticated, function(req, res) {
   }
 });
 
-
+app.get('/logout', function(req, res){
+  req.logout();
+  res.redirect('/');
+});
 
 var server = app.listen(process.env.PORT || 3000, function(){
     console.log("Server is listening...");
