@@ -110,7 +110,7 @@ app.get('/index', userAuth.isAuthenticated, function(req, res) {
 
 app.get('/join', function(req, res) {
       if (req.user) {
-    res.redirect('/index');
+    res.redirect('/');
   }
   else {
   res.sendFile(path.join(__dirname + '/client/view/join.html'));
@@ -139,6 +139,7 @@ app.post('/join', function(req, res, next) {
           console.log(user.fname);
           console.log(user.lname);
           user.save();
+          req.logout();
           //send a message to the client to say so
           res.json({ isValid: true, message: 'welcome ' + user.email });
         }
