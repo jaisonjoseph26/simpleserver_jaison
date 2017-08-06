@@ -77,6 +77,8 @@ var Posts = require('./models/Posts.js'); // include the posts model
 const User = require('./models/User.js');
 const PasswordReset = require('./models/PasswordReset.js');
 const Like = require('./models/Like.js');
+const Notifications = require('./models/Notifications.js');
+
 
 
 //added to posts table
@@ -343,6 +345,17 @@ app.post('/incrLike', userAuth.isAuthenticated, function(req, res) {
             like.userId = req.user.id;
             like.postId = req.body.id;
             like.save();
+            
+            console.log(post._doc);
+            console.log(post.userId);
+            var notification = new Notifications();
+            notification.userIdLiker = req.user.id;
+            notification.userIdLiked = post._doc.userId;
+            notification.postId = post._doc._id;
+            notification.likerFname = req.user.fname;
+
+            notification.isNotified = "no";
+            notification.save();
 
             //a successful save returns back the updated object
             res.json({ id: req.body.id, count: post.postLikeCount });
@@ -418,6 +431,64 @@ app.get('/verifypassword', function(req, res) {
       }
     });
 });
+
+// Get all notifications
+app.post('/notifications', userAuth.isAuthenticated, function(req, res) {
+      console.log("HERRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRR");
+
+
+  var thesePosts;
+  //go find all the posts in the database
+   Notifications.find( {'userIdLiked': req.user._id,'isNotified':'no'}).sort([
+      ['_id', 'descending']
+    ])
+    .then(function(notifications) {
+            thesePosts = notifications;
+            thesePosts.forEach(function(notification) {
+      notification.isNotified="yes";
+      notification.save();
+      console.log("alllllllllllll notificaaaaaaaaaaaaaations"+notifications+"thereeeeeeeeeeeeeeeeee");
+      
+      })
+      res.json(thesePosts);
+});
+});
+
+
+app.post('/getAllNotifications', userAuth.isAuthenticated, function(req, res) {
+      console.log("getallnotifications");
+
+
+  var thesePosts;
+  //go find all the posts in the database
+   Notifications.find( {'userIdLiked': req.user._id}).sort([
+      ['_id', 'descending']
+    ])
+    
+    .then(function(notifications) {
+    res.json(notifications);
+      
+      })
+    
+});
+
+
+app.post('/notificationscount', userAuth.isAuthenticated, function(req, res) {
+      console.log("HERRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRR");
+
+
+  var thesePosts;
+  //go find all the posts in the database
+   Notifications.count( {'userIdLiked': req.user._id,'isNotified':'no'})
+    
+    .then(function(count) {
+                  console.log(count+"JJJJJJJJJJJJJJJJJJJJJJJJJ");
+  res.json(count);
+      
+      })
+    
+});
+
 
 //tell the router how to handle a post request to upload a file
 app.post('/upload', userAuth.isAuthenticated, function(req, res) {

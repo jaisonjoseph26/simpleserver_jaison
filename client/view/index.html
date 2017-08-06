@@ -142,8 +142,63 @@ Group members:
 
           console.log(err);
         });
-    }
+        
+        
+    //get all notifications including old ones
+    
+     Promise.resolve()
+        .then(function() {
 
+          // Call the page with url posts using the http verb post
+          return $.post('getAllNotifications');
+        })
+        .then(function(notifications) {
+          if(notifications){
+            
+                      //on success , empty the DOM ad prepare for displaying the post 
+                $('#notify-list').html('');
+      
+                notifications.forEach(function(notification) {
+                  //append the psots to the DOM
+                              //append the psots to the DOM
+                 $('#notify-list').append(
+                    '<li><a href="#">'+notification.likerFname+' liked your post !</a></li>'
+                  );
+                })
+              .catch(function(err) {
+      
+                console.log(err);
+              })
+          }
+            
+        });
+ 
+    }
+    
+    //Get only new notifications
+        function getNewNotifications(){
+          
+                     Promise.resolve()
+                    .then(function(){
+                     return $.post('notifications');
+                    }) 
+                    .then(function(notifications){
+
+                    console.log(notifications+"vsdf");
+                             notifications.forEach(function(notification) {
+                      console.log(notification.likerFname+"sfdsfsfsdf");
+                      //append the psots to the DOM
+                      $('#notify-list').prepend(
+                        '<li><a href="#">'+notification.likerFname+' liked your post !</a></li>'
+                      );
+                      $("#notifycount").html("0");
+                    });
+                    //$("#welcome").html(" Hii, "+ user.user.fname+" !");
+                    })
+                    .catch(function(err){
+                        console.log(err);
+                    })
+        }
     
     $(document).ready(function(){
       
@@ -162,6 +217,8 @@ Group members:
                     .catch(function(err){
                         console.log(err);
                     })
+                    
+                    
      // Store a flag in the localstorage to let toastr know if there is a message to be notified
       if(localStorage.getItem("image_uploaded") == "true"){
         toastr.success('Yippee !! Pic uploaded successfully.', 'Success');
@@ -173,6 +230,8 @@ Group members:
         localStorage.setItem('image_uploaded',"");
         
       }
+      
+
       
       function myTimeoutFunction()
       {
@@ -215,6 +274,21 @@ Group members:
         .catch(function(err) {
           console.log(err);
         });
+                    
+                   // Belwo function is a timeout fn to get count of new notifn and display count 
+                    Promise.resolve()
+                    .then(function(){
+                     return $.post('notificationscount');
+                    }) 
+                    .then(function(count){
+
+                    console.log(count+"vsdf");
+     
+                    $("#notifycount").html(count);
+                    })
+                    .catch(function(err){
+                        console.log(err);
+                    })
       }
       myTimeoutFunction();
       setInterval(myTimeoutFunction, 6000);
@@ -246,9 +320,9 @@ Group members:
           <div class="text-center rpanel">
             <a data-toggle="modal" data-target="#myModal" href="#" id="image-upload-anchor"><i class="fa fa-instagram" aria-hidden="true"></i></a>
   
-  <a data-toggle="dropdown" class="dropdown" href="#" ><i class="fa fa-heart-o" aria-hidden="true"></i></a>
+  <a onclick = getNewNotifications(); data-toggle="dropdown" class="dropdown" href="#" ><i class="fa fa-heart-o" aria-hidden="true"><span id="notifycount"></span></i></a>
 
-<ul class="dropdown-menu">
+<ul id="notify-list" class="dropdown-menu">
           <li><a href="#">Page 1-1</a></li>
           <li><a href="#">Page 1-2</a></li>
           <li><a href="#">Page 1-3</a></li>

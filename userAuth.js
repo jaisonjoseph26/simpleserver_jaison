@@ -17,7 +17,7 @@ module.exports.init = function(passport){
             callback(err, user);
         });
     });
-
+    
     //set up the login handler
     passport.use('login', new LocalStrategy(handleLoginAttempt));
     //set up the signup handler
