@@ -35,6 +35,7 @@ Group members:
 
   <script type="text/javascript">
     /*global $*/
+    /*global req*/
     
     function likeClick(id) {
       Promise.resolve()
@@ -117,15 +118,14 @@ Group members:
           $('#posts').html('');
 
           posts.forEach(function(post) {
-            console.log(post);
             //append the psots to the DOM
             $('#posts').append(
 
-              '<div class="listing-outer col-md-12">' +
+              '<div id="'+ post._id +'" class="listing-outer col-md-12">' +
               '<div class="listing-inner">' +
               '<div class="top">' +
               '<img class="img-circle" src="http://placehold.it/300x300" alt="image">' +
-              '<span>Jaison</span>' +
+              '<span> ' + post.userFname +' ' + post.userLname +'</span>' +
               '</div>' +
               '<div class="middle">' +
               '<img class="image-main" src="' + post.postImage + '"/>' +
@@ -143,10 +143,26 @@ Group members:
           console.log(err);
         });
     }
+
     
     $(document).ready(function(){
       
     (function($) {
+      
+    
+  // Get the user data to be used in the welcome salutation
+                  Promise.resolve()
+                    .then(function(){
+                        return $.post('getUserData');
+                    })
+                    .then(function(user){
+
+                        $("#welcome").html(" Hii, "+ user.user.fname+" !");
+                    })
+                    .catch(function(err){
+                        console.log(err);
+                    })
+     // Store a flag in the localstorage to let toastr know if there is a message to be notified
       if(localStorage.getItem("image_uploaded") == "true"){
         toastr.success('Yippee !! Pic uploaded successfully.', 'Success');
         localStorage.setItem('image_uploaded',"false");
@@ -157,6 +173,51 @@ Group members:
         localStorage.setItem('image_uploaded',"");
         
       }
+      
+      function myTimeoutFunction()
+      {
+         Promise.resolve()
+        .then(function() {
+           var firstPostId = $("#posts").children(":first").attr("id");
+
+          return $.post('checkNewPost', 'lastPostId=' + firstPostId);
+
+          // Call the page with url posts using the http verb post
+        })
+
+        .then(function(posts) {
+          console.log(posts);
+          //on success , empty the DOM ad prepare for displaying the post 
+         
+
+          posts.forEach(function(post) {
+            console.log(post);
+            //append the psots to the DOM
+            $('#posts').prepend(
+              
+              '<div id="'+ post._id +'" class="listing-outer col-md-12">' +
+              '<div class="listing-inner">' +
+              '<div class="top">' +
+              '<img class="img-circle" src="http://placehold.it/300x300" alt="image">' +
+              '<span> ' + post.userFname +' ' + post.userLname +'</span>' +
+              '</div>' +
+              '<div class="middle">' +
+              '<img class="image-main" src="' + post.postImage + '"/>' +
+              '</div>' +
+              '<div class="bottom">' +
+              '<a   onclick="likeClick(\'' + post._id + '\');"  class="like-link" data-post-id="' + post._id + '" href="javascript:">'+
+              '<i id="heart-icon-' + post._id + '" class="fa fa-heart-o fa-3x ' + post.likeColor + '" aria-hidden="true"></i></a>' +
+              '<p class="like-count"><span id="count-value-' + post._id + '">' + post.postLikeCount + '</span> </p>' +
+              '</div></div></div>'
+            );
+          });
+        })
+        .catch(function(err) {
+          console.log(err);
+        });
+      }
+      myTimeoutFunction();
+      setInterval(myTimeoutFunction, 6000);
     })($);
     });
   </script>
@@ -184,8 +245,18 @@ Group members:
         <div class="col-md-4 hidden-sm hidden-xs">
           <div class="text-center rpanel">
             <a data-toggle="modal" data-target="#myModal" href="#" id="image-upload-anchor"><i class="fa fa-instagram" aria-hidden="true"></i></a>
-            <i class="fa fa-heart-o" aria-hidden="true"></i>
-            <i class="fa fa-user-o" aria-hidden="true"></i>
+  
+  <a data-toggle="dropdown" class="dropdown" href="#" ><i class="fa fa-heart-o" aria-hidden="true"></i></a>
+
+<ul class="dropdown-menu">
+          <li><a href="#">Page 1-1</a></li>
+          <li><a href="#">Page 1-2</a></li>
+          <li><a href="#">Page 1-3</a></li>
+        </ul>
+            
+<a href="/logout" ><i class="fa fa-sign-out" aria-hidden="true"><span id="welcome"></span> </i>
+        </a> 
+        
           </div>
         </div>
 
@@ -218,9 +289,7 @@ Group members:
       </div>
     </div>
 
-    <div id="posts" class="container">
-
-
+    <div id="posts" class="container"> 
 
     </div>
 

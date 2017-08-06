@@ -31,17 +31,19 @@ Group members:
      <script>
             /*global $*/
             function handleJoinAttempt(){
+                var fname = $('#join_fname').val();
+                var lname = $('#join_lname').val();
                 var email = $('#join_email').val();
                 var password = $('#join_password').val();
                 var repeatPassword = $('#join_confirm_password').val();
                 console.log("outside valid");
                 //Perform validation of the form inputs
-                if (email.length > 0 && password.length > 0 && repeatPassword.length > 0 && password == repeatPassword){
+                if (fname.length > 0 && lname.length > 0 && email.length > 0 && password.length > 0 && repeatPassword.length > 0 && password == repeatPassword){
 
                     Promise.resolve()
                     .then(function(){
                       //send the email and password to the post route
-                        return $.post('join', 'username=' + email + '&password=' + password);
+                        return $.post('join', 'username=' + email + '&password=' + password + '&fname=' + fname +'&lname='+lname);
                     })
                     .then(function(auth){
                       
@@ -62,7 +64,7 @@ Group members:
                         console.log(err);
                     })
                 } else {
-                    $('#error').html('Please provide both username and password and ensure passwords match');
+                    $('#error').html('Please providefirst name, last name, username, email  and password and ensure passwords match');
                 }
             }
         </script>
@@ -112,6 +114,16 @@ Group members:
                     <h2>Signup</h2>
 
               <form id="insta_join">
+                
+                        <div class="form-group">
+                            <label for="exampleInputFname">First Name</label>
+                          <input id="join_fname" type="text" class="form-control" id="exampleInputFname" aria-describedby="fnameHelp" placeholder="Enter Fname">
+                        </div>
+                        <div class="form-group">
+                          <label for="exampleInputFname">Last Name</label>
+                          <input id="join_lname" type="text" class="form-control" id="exampleInputLname" aria-describedby="lnameHelp" placeholder="Enter Lname">
+                        </div>
+                        
                         <div class="form-group">
                           <label for="exampleInputEmail1">Email address</label>
                           <input id="join_email" type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Enter email">
@@ -128,7 +140,7 @@ Group members:
               </form>
               
               <div>
-                <p>Are you a new user? <a href="/">Signin!</a></p>
+                <p>Existing User? <a href="/">Signin!</a></p>
                 <p>Forgot password? Click <a href="/passwordreset">here</a></p>
               </div>
         </div>
