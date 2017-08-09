@@ -105,6 +105,27 @@ padding: .375rem .5625rem .5625rem;
 background: #f04124;
 font-weight: 400;
 }
+
+.anchor-links{
+	
+	color:#000000;
+}
+
+.anchor-links:visited{
+	
+	color:#000000;
+}
+
+.anchor-links:hover{
+	
+	color:#000000;
+}
+.anchor-links:active{
+	
+	color:#000000;
+}
+
+
 /*Media queries for mobile versions*/
 @media screen and (max-width: 991px) {
  .lpanel {

@@ -27,6 +27,8 @@ Group members:
 <script type="text/javascript">
     /*global $*/
     /*global req*/
+
+    
     function likeClick(id) {
       Promise.resolve()
         .then(function() {
@@ -119,9 +121,9 @@ Group members:
               '<img class="image-main" src="' + post.postImage + '"/>' +
               '</div>' +
               '<div class="bottom">' +
-              '<a   onclick="likeClick(\'' + post._id + '\');"  class="like-link" data-post-id="' + post._id + '" href="javascript:">'+
+              '<a   onclick="likeClick(\'' + post._id + '\');"  class="like-link" data-post-id="' + post._id + '" href="javascript:" >'+
               '<i id="heart-icon-' + post._id + '" class="fa fa-heart-o fa-3x ' + post.likeColor + '" aria-hidden="true"></i></a>' +
-              '<p class="like-count"><span id="count-value-' + post._id + '">' + post.postLikeCount + '</span></p>' +
+              '<p class="like-count"><a href ="#"><span id="count-value-' + post._id + '" data-toggle="modal" data-target="#likeModal"  >' + post.postLikeCount + '  </span></a></p>' +
               '</div></div></div>'
             );
           });
@@ -152,10 +154,7 @@ Group members:
                     '<li><a href="#">'+notification.likerFname+' liked your post !</a></li>'
                   );
                 })
-              .catch(function(err) {
-      
-                console.log(err);
-              })
+           
           }
             
         });
@@ -249,7 +248,7 @@ Group members:
               '<div class="bottom">' +
               '<a   onclick="likeClick(\'' + post._id + '\');"  class="like-link" data-post-id="' + post._id + '" href="javascript:">'+
               '<i id="heart-icon-' + post._id + '" class="fa fa-heart-o fa-3x ' + post.likeColor + '" aria-hidden="true"></i></a>' +
-              '<p class="like-count"><span id="count-value-' + post._id + '">' + post.postLikeCount + '</span></p>' +
+              '<p class="like-count"><span id="count-value-' + post._id + ' rel="tooltip" and title="Enter your tip here" ">' + post.postLikeCount + '</span></p>' +
               '</div></div></div>'
             );
           });
@@ -284,7 +283,7 @@ Group members:
     <nav class="navbar">
         <div class="container">
             <div class="col-md-4 lpanel col-sm-12 col-xs-12">
-                <a style="text-decoration:none;" href="/index"><i class="fa fa-instagram hidden-sm hidden-xs" aria-hidden="true"></i> Instagram
+                <a style="text-decoration:none;" class="anchor-links" href="/index"><i class="fa fa-instagram hidden-sm hidden-xs" aria-hidden="true"></i> Instagram
         </a>
             </div>
             <div class="col-md-4 hidden-sm hidden-xs">
@@ -297,10 +296,10 @@ Group members:
                 </div>
                 <div class="col-md-4 hidden-sm hidden-xs">
                     <div class="text-center rpanel">
-                        <a data-toggle="modal" data-target="#myModal" href="#" id="image-upload-anchor">
+                        <a data-toggle="modal" class="anchor-links" data-target="#myModal" href="#" id="image-upload-anchor">
                             <i class="fa fa-instagram" aria-hidden="true"></i>
                         </a>
-                        <a onclick = getNewNotifications(); data-toggle="dropdown" class="dropdown" href="#" >
+                        <a onclick = getNewNotifications(); data-toggle="dropdown anchor-links" class="dropdown anchor-links " href="#" >
                             <i class="fa fa-heart-o" aria-hidden="true">
                                 <span id="notifycount"></span>
                             </i>
@@ -316,7 +315,7 @@ Group members:
                                 <a href="#">Page 1-3</a>
                             </li>
                         </ul>
-                        <a href="/logout" > <span id="welcome"></span>
+                        <a href="/logout" class="anchor-links" > <span id="welcome"></span>
                             <i class="fa fa-sign-out" aria-hidden="true">
                             
                             </i>
@@ -326,6 +325,33 @@ Group members:
             </div>
         </nav>
     </header>
+    <!--- Modal for Like listings --->
+    
+    <!-- Modal -->
+    
+        <div id="likeModal" class="modal fade" role="dialog">
+          <div class="modal-dialog">
+        
+            <!-- Modal content-->
+            <div class="modal-content">
+              <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Modal Header</h4>
+              </div>
+              <div class="modal-body">
+                <p>Some text in the modal.</p>
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+              </div>
+            </div>
+        
+          </div>
+        </div>
+    
+    
+    
+    
     <!-- main-wrapper for User Post Listings-->
     <div class="main-wrapper">
         <div class="upload-wrapper">

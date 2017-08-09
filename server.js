@@ -364,7 +364,6 @@ app.post('/passwordreset', (req, res) => {
               //below line sends the email and we have passed the to address, subject and body as parameters
               email.send(req.body.email, 'password reset', 'https://node-app-jaisonjoseph26.c9users.io/verifypassword?id=' + pr.id);
               res.json("mail_sent");
-
             }
           });
       }
