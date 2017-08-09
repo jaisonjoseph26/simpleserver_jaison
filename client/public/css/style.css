@@ -94,9 +94,20 @@ nav i.fa.fa-instagram.hidden-sm.hidden-xs {
 	text-align: center;
 
 }
+.help-block{
+	
+	color:#a94442;
+}
+span.error{
+display: block;
+margin-top: -1px;
+padding: .375rem .5625rem .5625rem;
+background: #f04124;
+font-weight: 400;
+}
 /*Media queries for mobile versions*/
-@media screen and ( max-width: 991px ) {  
-.lpanel {
+@media screen and (max-width: 991px) {
+ .lpanel {
 	text-align:center;
 }	
 
@@ -104,8 +115,5 @@ nav i.fa.fa-instagram.hidden-sm.hidden-xs {
 	max-width:100%;
 	margin:15px auto;
 	text-align: center;
-	
 }
-
 }
-

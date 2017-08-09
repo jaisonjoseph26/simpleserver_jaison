@@ -107,9 +107,9 @@ app.get('/index', userAuth.isAuthenticated, function(req, res) {
 });
 
 // route to take user to the join page
-
 app.get('/join', function(req, res) {
-      if (req.user) {
+  // added validation to check if user logged in and yes then take to posts page
+  if (req.user) {
     res.redirect('/');
   }
   else {
@@ -157,9 +157,6 @@ app.get('/', function(req, res) {
 
   }
   else {
-
-    //res.redirect('/');
-
     console.log('client requests signin');
     res.sendFile(path.join(__dirname + '/client/view/signin.html'));
   }
@@ -224,32 +221,23 @@ app.post('/posts', userAuth.isAuthenticated, function(req, res) {
           .then(function(like) {
             post._doc.isLiked = like ? true : false;
           }));
-
-
         promises.push(
+          
           Promise.resolve()
+          
           .then(function() {
-
-
-            console.log(post._doc);
-
+            
             return User.findOne({ '_id': post._doc.userId })
+            
           })
           .then(function(user) {
-
+            // Get user fnmae and Lname to send to the view to display it over there
             post._doc.userFname = user.fname;
             post._doc.userLname = user.lname;
-            console.log(user);
-            console.log(post._doc.userFname);
-
 
           }));
 
-
-
       });
-
-
 
       return Promise.all(promises);
     })
@@ -260,18 +248,13 @@ app.post('/posts', userAuth.isAuthenticated, function(req, res) {
 });
 
 // get user data to display on the welcome salutation
-
 app.post('/getUserData', userAuth.isAuthenticated, function(req, res) {
   res.json({ user: req.user });
-
-
 });
 
-//
+// Method to check new posts and notify user
 app.post('/checkNewPost', userAuth.isAuthenticated, function(req, res) {
     var thesePosts;
-
-
   Posts.find({"_id": {"$gt": req.body.lastPostId}}).sort([
       ['_id', 'descending']
     ])
@@ -287,33 +270,18 @@ app.post('/checkNewPost', userAuth.isAuthenticated, function(req, res) {
           .then(function(like) {
             post._doc.isLiked = like ? true : false;
           }));
-
-
         promises.push(
           Promise.resolve()
           .then(function() {
-
-
-            console.log(post._doc);
-
             return User.findOne({ '_id': post._doc.userId })
           })
           .then(function(user) {
 
             post._doc.userFname = user.fname;
             post._doc.userLname = user.lname;
-            console.log(user);
-            console.log(post._doc.userFname);
-
 
           }));
-
-
-
       });
-
-
-
       return Promise.all(promises);
     })
     .then(function() {
@@ -433,10 +401,8 @@ app.get('/verifypassword', function(req, res) {
     });
 });
 
-// Get all notifications
+// Get new notifications
 app.post('/notifications', userAuth.isAuthenticated, function(req, res) {
-      console.log("HERRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRR");
-
 
   var thesePosts;
   //go find all the posts in the database
@@ -455,11 +421,9 @@ app.post('/notifications', userAuth.isAuthenticated, function(req, res) {
 });
 });
 
-
+//Get list of all notifications and display it on the notification list on the menu
 app.post('/getAllNotifications', userAuth.isAuthenticated, function(req, res) {
       console.log("getallnotifications");
-
-
   var thesePosts;
   //go find all the posts in the database
    Notifications.find( {'userIdLiked': req.user._id}).sort([
@@ -473,18 +437,16 @@ app.post('/getAllNotifications', userAuth.isAuthenticated, function(req, res) {
     
 });
 
-
+// Get notifications count and display on the menu
 app.post('/notificationscount', userAuth.isAuthenticated, function(req, res) {
-      console.log("HERRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRR");
-
 
   var thesePosts;
   //go find all the posts in the database
    Notifications.count( {'userIdLiked': req.user._id,'isNotified':'no'})
     
     .then(function(count) {
-                  console.log(count+"JJJJJJJJJJJJJJJJJJJJJJJJJ");
-  res.json(count);
+      console.log(count+"JJJJJJJJJJJJJJJJJJJJJJJJJ");
+      res.json(count);
       
       })
     
@@ -566,6 +528,7 @@ app.post('/upload', userAuth.isAuthenticated, function(req, res) {
   }
 });
 
+//Support for logout using passport
 app.get('/logout', function(req, res) {
   req.logout();
   res.redirect('/');

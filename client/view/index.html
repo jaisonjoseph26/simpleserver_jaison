@@ -10,10 +10,23 @@ Group members:
 
 
  -->
-<!doctype html><html lang="en"><head><title>Simplest Website</title><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0"><link rel="stylesheet" href="/bootstrap-3.3.7-dist/css/bootstrap.min.css"><link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet"><link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet"><link rel="stylesheet" href="../css/style.css"><script src="../js/jquery.min.js"></script><script src="/bootstrap-3.3.7-dist/js/bootstrap.min.js"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css"><script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script><script type="text/javascript">
+<!doctype html>
+<html lang="en">
+<head>
+<title>Simplest Website</title>
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="stylesheet" href="/bootstrap-3.3.7-dist/css/bootstrap.min.css">
+<link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet">
+<link rel="stylesheet" href="../css/style.css">
+<script src="../js/jquery.min.js"></script>
+<script src="/bootstrap-3.3.7-dist/js/bootstrap.min.js"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
+<script type="text/javascript">
     /*global $*/
     /*global req*/
-    
     function likeClick(id) {
       Promise.resolve()
         .then(function() {
@@ -77,8 +90,6 @@ Group members:
       });
     }
 
-
-
     //the onload function to be execute as declared in body tAG
     function onload() {
 
@@ -122,7 +133,6 @@ Group members:
         
         
     //get all notifications including old ones
-    
      Promise.resolve()
         .then(function() {
 
@@ -180,8 +190,6 @@ Group members:
     $(document).ready(function(){
       
     (function($) {
-      
-    
   // Get the user data to be used in the welcome salutation
                   Promise.resolve()
                     .then(function(){
@@ -208,14 +216,12 @@ Group members:
         
       }
       
-
-      
+// a timeout function to do polling for new notifications and posts to be appended to the dom
       function myTimeoutFunction()
       {
          Promise.resolve()
         .then(function() {
            var firstPostId = $("#posts").children(":first").attr("id");
-
           return $.post('checkNewPost', 'lastPostId=' + firstPostId);
 
           // Call the page with url posts using the http verb post
@@ -274,122 +280,122 @@ Group members:
   </script></head><body onload="onload();">
 <!--onload function gets called here -->
 <header>
-	<!-- NAVIGATION -->
-	<nav class="navbar">
-		<div class="container">
-			<div class="col-md-4 lpanel col-sm-12 col-xs-12">
-				<a style="text-decoration:none;" href="/index"><i class="fa fa-instagram hidden-sm hidden-xs" aria-hidden="true"></i> Instagram
+    <!-- NAVIGATION -->
+    <nav class="navbar">
+        <div class="container">
+            <div class="col-md-4 lpanel col-sm-12 col-xs-12">
+                <a style="text-decoration:none;" href="/index"><i class="fa fa-instagram hidden-sm hidden-xs" aria-hidden="true"></i> Instagram
         </a>
-			</div>
-			<div class="col-md-4 hidden-sm hidden-xs">
-				<div class="input-group">
-					<input type="text" class="form-control" placeholder="Search for...">
-						<span class="input-group-btn">
-							<button class="btn btn-default" type="button">Go!</button>
-						</span>
-					</div>
-				</div>
-				<div class="col-md-4 hidden-sm hidden-xs">
-					<div class="text-center rpanel">
-						<a data-toggle="modal" data-target="#myModal" href="#" id="image-upload-anchor">
-							<i class="fa fa-instagram" aria-hidden="true"></i>
-						</a>
-						<a onclick = getNewNotifications(); data-toggle="dropdown" class="dropdown" href="#" >
-							<i class="fa fa-heart-o" aria-hidden="true">
-								<span id="notifycount"></span>
-							</i>
-						</a>
-						<ul id="notify-list" class="dropdown-menu">
-							<li>
-								<a href="#">Page 1-1</a>
-							</li>
-							<li>
-								<a href="#">Page 1-2</a>
-							</li>
-							<li>
-								<a href="#">Page 1-3</a>
-							</li>
-						</ul>
-						<a href="/logout" >	<span id="welcome"></span>
-							<i class="fa fa-sign-out" aria-hidden="true">
-							
-							</i>
-						</a>
-					</div>
-				</div>
-			</div>
-		</nav>
-	</header>
-	<!-- main-wrapper for User Post Listings-->
-	<div class="main-wrapper">
-		<div class="upload-wrapper">
-			<!-- Modal -->
-			<div class="modal fade" id="myModal" role="dialog">
-				<div class="modal-dialog">
-					<!-- Modal content-->
-					<div class="modal-content">
-						<div class="modal-header">
-							<button type="button" class="close" data-dismiss="modal">&times;</button>
-							<h4 class="modal-title">Add a Picture</h4>
-						</div>
-						<div class="modal-body">
-							<form id="uploadForm" enctype="multipart/form-data" name="uploadForm" novalidate>
-								<input type="file" name="userPhoto" id="userPhoto" />
-							</form>
-						</div>
-						<div class="modal-footer">
-							<button type="button" class="btn btn-default" data-dismiss="modal" onclick="uploadClick();">Send</button>
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>
-		<div id="posts" class="container"></div>
-	</div>
-	<!-- /main-wrapper -->
-	<!-- FOOTER -->
-	<div class="container">
-		<div class="listing-outer col-md-12">
-			<!-- FOOTER for desktop version -->
-			<div class="footer-inner  hidden-sm hidden-xs">
-				<div class="footer-top">
-					<ul>
-						<li class="footer-menu ">About us</li>
-						<li class="footer-menu">Support</li>
-						<li class="footer-menu">Blog</li>
-						<li class="footer-menu">Press</li>
-						<li class="footer-menu">Api</li>
-						<li class="footer-menu">Jobs</li>
-					</ul>
-				</div>
-				<div class="copyrights">
-					<p class="">&copy; 2017 INSTAGRAM</p>
-				</div>
-			</div>
-			<!-- FOOTER for mobile version -->
-			<div class="footer-mobile hidden-lg  hidden-sm">
-				<div class="col-sm-3">
-					<a href="">
-						<i class="fa fa-home" aria-hidden="true"></i>
-					</a>
-				</div>
-				<div class="col-sm-3">
-					<a href="">
-						<i class="fa fa-search" aria-hidden="true"></i>
-					</a>
-				</div>
-				<div class="col-sm-3">
-					<a href="">
-						<i class="fa fa-heart-o" aria-hidden="true"></i>
-					</a>
-				</div>
-				<div class="col-sm-3">
-					<a href="">
-						<i class="fa fa-map-o" aria-hidden="true"></i>
-					</a>
-				</div>
-			</div>
-		</div>
-	</body>
-	<footer></footer>
+            </div>
+            <div class="col-md-4 hidden-sm hidden-xs">
+                <div class="input-group">
+                    <input type="text" class="form-control" placeholder="Search for...">
+                        <span class="input-group-btn">
+                            <button class="btn btn-default" type="button">Go!</button>
+                        </span>
+                    </div>
+                </div>
+                <div class="col-md-4 hidden-sm hidden-xs">
+                    <div class="text-center rpanel">
+                        <a data-toggle="modal" data-target="#myModal" href="#" id="image-upload-anchor">
+                            <i class="fa fa-instagram" aria-hidden="true"></i>
+                        </a>
+                        <a onclick = getNewNotifications(); data-toggle="dropdown" class="dropdown" href="#" >
+                            <i class="fa fa-heart-o" aria-hidden="true">
+                                <span id="notifycount"></span>
+                            </i>
+                        </a>
+                        <ul id="notify-list" class="dropdown-menu">
+                            <li>
+                                <a href="#">Page 1-1</a>
+                            </li>
+                            <li>
+                                <a href="#">Page 1-2</a>
+                            </li>
+                            <li>
+                                <a href="#">Page 1-3</a>
+                            </li>
+                        </ul>
+                        <a href="/logout" > <span id="welcome"></span>
+                            <i class="fa fa-sign-out" aria-hidden="true">
+                            
+                            </i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </nav>
+    </header>
+    <!-- main-wrapper for User Post Listings-->
+    <div class="main-wrapper">
+        <div class="upload-wrapper">
+            <!-- Modal -->
+            <div class="modal fade" id="myModal" role="dialog">
+                <div class="modal-dialog">
+                    <!-- Modal content-->
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal">&times;</button>
+                            <h4 class="modal-title">Add a Picture</h4>
+                        </div>
+                        <div class="modal-body">
+                            <form id="uploadForm" enctype="multipart/form-data" name="uploadForm" novalidate>
+                                <input type="file" name="userPhoto" id="userPhoto" />
+                            </form>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-default" data-dismiss="modal" onclick="uploadClick();">Send</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div id="posts" class="container"></div>
+    </div>
+    <!-- /main-wrapper -->
+    <!-- FOOTER -->
+    <div class="container">
+        <div class="listing-outer col-md-12">
+            <!-- FOOTER for desktop version -->
+            <div class="footer-inner  hidden-sm hidden-xs">
+                <div class="footer-top">
+                    <ul>
+                        <li class="footer-menu ">About us</li>
+                        <li class="footer-menu">Support</li>
+                        <li class="footer-menu">Blog</li>
+                        <li class="footer-menu">Press</li>
+                        <li class="footer-menu">Api</li>
+                        <li class="footer-menu">Jobs</li>
+                    </ul>
+                </div>
+                <div class="copyrights">
+                    <p class="">&copy; 2017 INSTAGRAM</p>
+                </div>
+            </div>
+            <!-- FOOTER for mobile version -->
+            <div class="footer-mobile hidden-lg  hidden-sm">
+                <div class="col-sm-3">
+                    <a href="">
+                        <i class="fa fa-home" aria-hidden="true"></i>
+                    </a>
+                </div>
+                <div class="col-sm-3">
+                    <a href="">
+                        <i class="fa fa-search" aria-hidden="true"></i>
+                    </a>
+                </div>
+                <div class="col-sm-3">
+                    <a href="">
+                        <i class="fa fa-heart-o" aria-hidden="true"></i>
+                    </a>
+                </div>
+                <div class="col-sm-3">
+                    <a href="">
+                        <i class="fa fa-map-o" aria-hidden="true"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </body>
+    <footer></footer>
 </html>

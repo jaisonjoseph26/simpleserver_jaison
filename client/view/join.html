@@ -27,7 +27,10 @@ Group members:
     <script src="../js/jquery.min.js"></script>
 
     <script src="/bootstrap-3.3.7-dist/js/bootstrap.min.js"></script>
-    
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/1000hz-bootstrap-validator/0.11.9/validator.min.js"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
+
      <script>
             /*global $*/
             function handleJoinAttempt(){
@@ -64,7 +67,10 @@ Group members:
                         console.log(err);
                     })
                 } else {
-                    $('#error').html('Please providefirst name, last name, username, email  and password and ensure passwords match');
+                  
+                  toastr.error('Please provide first name, last name, username, email  and password and ensure passwords match', 'Error');
+
+                   
                 }
             }
         </script>
@@ -108,28 +114,39 @@ Group members:
             <p id="error"></p>
                     <h2>Signup</h2>
 
-              <form id="insta_join">
+              <form id="insta_join" data-toggle="validator">
                 
                         <div class="form-group">
                             <label for="exampleInputFname">First Name</label>
-                          <input id="join_fname" type="text" class="form-control" id="exampleInputFname" aria-describedby="fnameHelp" placeholder="Enter Fname">
+                          <input id="join_fname" type="text" class="form-control"  aria-describedby="fnameHelp" placeholder="Enter Fname">
+                          <div class="help-block with-errors"></div>
+
                         </div>
                         <div class="form-group">
                           <label for="exampleInputFname">Last Name</label>
-                          <input id="join_lname" type="text" class="form-control" id="exampleInputLname" aria-describedby="lnameHelp" placeholder="Enter Lname">
+                          <input id="join_lname" type="text" class="form-control" aria-describedby="lnameHelp" placeholder="Enter Lname">
+                          
+                       <div class="help-block with-errors"></div>
+
                         </div>
                         
                         <div class="form-group">
                           <label for="exampleInputEmail1">Email address</label>
-                          <input id="join_email" type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Enter email">
+                          <input id="join_email" type="email" class="form-control"  aria-describedby="emailHelp" placeholder="Enter email">
+                          <div class="help-block with-errors"></div>
+
                         </div>
                         <div class="form-group">
                           <label for="exampleInputPassword1">Password</label>
-                          <input id="join_password" type="password" class="form-control" id="exampleInputPassword1" placeholder="Password">
+                          <input id="join_password" data-minlength="3" type="password" class="form-control" placeholder="Password">
+                          <div class="help-block with-errors"></div>
+
                         </div>
                         <div class="form-group">
                           <label for="exampleInputPassword2">Confirm Password</label>
-                          <input id="join_confirm_password" type="password" class="form-control" id="exampleInputPassword2" placeholder="Password">
+                          <input id="join_confirm_password" data-match="#join_password" data-match-error="Whoops, these don't match" type="password" class="form-control"  placeholder="Password">
+                         <div class="help-block with-errors"> </div>
+
                         </div>
                         <button type="button" class="btn btn-primary" onclick="handleJoinAttempt()">Submit</button>
               </form>
